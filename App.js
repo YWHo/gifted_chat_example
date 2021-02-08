@@ -1,21 +1,68 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { GiftedChat } from 'react-native-gifted-chat';
+import initialMessages from './messages';
+import { renderInputToolbar, renderActions, renderComposer, renderSend } from './InputToolbar';
+import {
+  renderAvatar,
+  renderBubble,
+  renderSystemMessage,
+  renderMessage,
+  renderMessageText,
+  renderCustomView,
+} from './MessageContainer';
 
-export default function App() {
+export default function App () {
+  const [text, setText] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    setMessages(initialMessages.reverse());
+  }, []);
+
+  const onSend = (newMessages = []) => {
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GiftedChat
+      messages={messages}
+      text={text}
+      onInputTextChanged={setText}
+      onSend={onSend}
+      user={{
+        _id: 1,
+        name: 'Aaron',
+        avatar: 'https://placeimg.com/150/150/any',
+      }}
+      alignTop
+      alwaysShowSend
+      scrollToBottom
+      // showUserAvatar
+      renderAvatarOnTop
+      renderUsernameOnMessage
+      bottomOffset={26}
+      onPressAvatar={console.log}
+      renderInputToolbar={renderInputToolbar}
+      renderActions={renderActions}
+      renderComposer={renderComposer}
+      renderSend={renderSend}
+      renderAvatar={renderAvatar}
+      renderBubble={renderBubble}
+      renderSystemMessage={renderSystemMessage}
+      renderMessage={renderMessage}
+      renderMessageText={renderMessageText}
+      // renderMessageImage
+      renderCustomView={renderCustomView}
+      isCustomViewBottom
+      messagesContainerStyle={{ backgroundColor: 'indigo' }}
+      parsePatterns={(linkStyle) => [
+        {
+          pattern: /#(\w+)/,
+          style: linkStyle,
+          onPress: (tag) => console.log(`Pressed on hashtag: ${tag}`),
+        },
+      ]}
+    />
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
