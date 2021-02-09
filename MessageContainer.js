@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Avatar, Bubble, SystemMessage, Message, MessageText } from 'react-native-gifted-chat';
+import AdaptiveCard from 'adaptivecards-reactnative';
 
 export const renderAvatar = (props) => (
   <Avatar
@@ -50,16 +51,36 @@ export const renderSystemMessage = (props) => (
   />
 );
 
-export const renderMessage = (props) => (
-  <Message
-    {...props}
-    // renderDay={() => <Text>Date</Text>}
-    containerStyle={{
-      left: { backgroundColor: 'lime' },
-      right: { backgroundColor: 'gold' },
-    }}
-  />
-);
+export const renderMessage = (props) => {
+  const { currentMessage } = props;
+  if ('attachments' in currentMessage) {
+    return (
+      <View style={styles.AdaptiveCardOuterContainer}>
+        <View style={styles.AdaptiveCardInnerContainer}>
+          {currentMessage.attachments.map(card => (
+            <AdaptiveCard
+              style={styles.AdaptiveCard }
+              payload={card.content}
+              onExecuteAction={data => console.log('Action executed: data=\n', data)}
+            />
+          ))}
+        </View>
+      </View>
+
+    )
+  } else {
+    return (
+      <Message
+        {...props}
+        // renderDay={() => <Text>Date</Text>}
+        containerStyle={{
+          left: { backgroundColor: 'lime' },
+          right: { backgroundColor: 'gold' },
+        }}
+      />
+    )
+  }
+}
 
 export const renderMessageText = (props) => (
   <MessageText
@@ -89,3 +110,14 @@ export const renderCustomView = ({ user }) => (
     <Text>From CustomView</Text>
   </View>
 );
+
+
+const styles = StyleSheet.create({
+  AdaptiveCardInnerContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10
+  },
+  AdaptiveCardOuterContainer: {
+    padding: 16
+  }
+})

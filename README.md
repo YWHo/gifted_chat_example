@@ -1,6 +1,7 @@
 # example-gifted-chat
 
 This is the example from https://github.com/FaridSafi/react-native-gifted-chat/tree/master/example-gifted-chat
+(Also added the example of using 'adaptivecards-reactnative')
 
 Lots of people using `react-native-gifted-chat` might want to know that...
 
