@@ -56,17 +56,18 @@ export const renderMessage = (props) => {
   if ('attachments' in currentMessage) {
     return (
       <View style={styles.AdaptiveCardOuterContainer}>
-        <View style={styles.AdaptiveCardInnerContainer}>
-          {currentMessage.attachments.map(card => (
-            <AdaptiveCard
-              style={styles.AdaptiveCard }
-              payload={card.content}
-              onExecuteAction={data => console.log('Action executed: data=\n', data)}
-            />
-          ))}
-        </View>
+        {currentMessage.attachments.map(card => (
+          <AdaptiveCard
+            style={styles.AdaptiveCard }
+            payload={card.content}
+            onExecuteAction={data => console.log('Action executed: data=\n', data)}
+            containerStyle={{
+              backgroundColor: 'white',
+              borderRadius: 10
+            }}
+          />
+        ))}
       </View>
-
     )
   } else {
     return (
@@ -113,10 +114,6 @@ export const renderCustomView = ({ user }) => (
 
 
 const styles = StyleSheet.create({
-  AdaptiveCardInnerContainer: {
-    backgroundColor: 'white',
-    borderRadius: 10
-  },
   AdaptiveCardOuterContainer: {
     padding: 16
   }
